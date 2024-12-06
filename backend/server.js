@@ -17,10 +17,6 @@ app.use(express.json());
 
 const startServer = async () => {
     try {
-        if (!process.env.MONGODB_URL) {
-            throw new Error('MongoDB URL is Not Defined');
-        }
-
         await mongoose.connect(process.env.MONGODB_URL);
         console.log("MONGODB CONNECTED SUCCESSFULLY");
     } catch (error) {
@@ -83,7 +79,7 @@ app.get("/api/search", async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
-    startServer();
+app.listen(PORT, async () => {
+    await startServer();
     console.log(`Server is running on port ${PORT}`);
 });
