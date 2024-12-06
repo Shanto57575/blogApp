@@ -17,10 +17,14 @@ app.use(express.json());
 
 const startServer = async () => {
     try {
+        if (!process.env.MONGODB_URL) {
+            throw new Error('MongoDB URL is Not Defined');
+        }
+
         await mongoose.connect(process.env.MONGODB_URL);
-        console.log("MONGODB CONNECTED");
+        console.log("MONGODB CONNECTED SUCCESSFULLY");
     } catch (error) {
-        console.error("Error connecting to MongoDB:", error);
+        console.error("Error connecting to MongoDB:", error.message);
         process.exit(1);
     }
 };
