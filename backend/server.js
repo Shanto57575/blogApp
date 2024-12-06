@@ -8,7 +8,10 @@ const app = express();
 const PORT = process.env.PORT || 5001;
 
 app.use(cors({
-    origin: [process.env.FRONTEND_URL],
+    origin: [
+        'https://blog-uni-verse.vercel.app',
+        'http://localhost:5173'
+    ],
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type']
 }));
@@ -16,12 +19,18 @@ app.use(cors({
 app.use(express.json());
 
 const startServer = async () => {
-    const mongoURL = process.env.MONGODB_URL || '';
     try {
-        await mongoose.connect(mongoURL);
+        console.log("MongoDB URL:", process.env.MONGODB_URL);
+        await mongoose.connect(process.env.MONGODB_URL, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        });
         console.log("MONGODB CONNECTED SUCCESSFULLY");
     } catch (error) {
-        console.error("Error connecting to MongoDB:", error.message);
+        console.error("Error connecting to MongoDB:", {
+            message: error.message,
+            stack: error.stack
+        });
         process.exit(1);
     }
 };
@@ -38,13 +47,11 @@ app.get("/api/search", async (req, res) => {
         limit = 6
     } = req.query;
 
-    // Convert to numbers
     const pageNum = parseInt(page);
     const limitNum = parseInt(limit);
 
     let searchQuery = {};
 
-    // More flexible search with case-insensitive partial matching
     if (query && query.trim()) {
         searchQuery.$or = [
             { title: { $regex: query.trim(), $options: "i" } },
@@ -57,10 +64,8 @@ app.get("/api/search", async (req, res) => {
     }
 
     try {
-        // Total count for pagination
         const totalBlogs = await Blog.countDocuments(searchQuery);
 
-        // Paginated results
         const blogs = await Blog.find(searchQuery)
             .skip((pageNum - 1) * limitNum)
             .limit(limitNum);
