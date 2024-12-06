@@ -8,7 +8,7 @@ const app = express();
 const PORT = process.env.PORT || 5001;
 
 app.use(cors({
-    origin: ['http://localhost:5173', process.env.FRONTEND_URL],
+    origin: [process.env.FRONTEND_URL],
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type']
 }));
@@ -16,8 +16,9 @@ app.use(cors({
 app.use(express.json());
 
 const startServer = async () => {
+    const mongoURL = process.env.MONGODB_URL || '';
     try {
-        await mongoose.connect(process.env.MONGODB_URL);
+        await mongoose.connect(mongoURL);
         console.log("MONGODB CONNECTED SUCCESSFULLY");
     } catch (error) {
         console.error("Error connecting to MongoDB:", error.message);
