@@ -39,7 +39,7 @@ function App() {
 		setLoading(true);
 		try {
 			const response = await axios.get(
-				`${import.meta.env.VITE_BACKEND_URL}/api/search`,
+				"https://shanto-blogbackend.vercel.app/api/search",
 				{
 					params: {
 						query,
@@ -105,9 +105,7 @@ function App() {
 							type="text"
 							placeholder="Explore topics, stories, insights..."
 							className="w-full px-6 py-4 
-                bg-gray-800 border-2 border-gray-700 
-                rounded-full text-gray-200 
-                placeholder-gray-500 
+                bg-gray-800 border-2 border-gray-700 rounded-full text-gray-200 placeholder-gray-500 
                 focus:outline-none 
                 focus:ring-2 focus:ring-purple-500 
                 transition duration-300"
@@ -122,13 +120,11 @@ function App() {
 						{categories.map((cat) => (
 							<button
 								key={cat.value}
-								className={`px-4 py-2 rounded-full text-sm font-medium 
-                  transition duration-300 
-                  ${
-										category === cat.value
-											? `bg-gradient-to-r ${cat.gradient} text-white`
-											: "bg-gray-800 text-gray-400 hover:bg-gray-700"
-									}`}
+								className={`px-4 py-2 rounded-full text-sm font-medium transition duration-300 ${
+									category === cat.value
+										? `bg-gradient-to-r ${cat.gradient} text-white`
+										: "bg-gray-800 text-gray-400 hover:bg-gray-700"
+								}`}
 								onClick={() => setCategory(cat.value)}
 							>
 								{cat.label}
@@ -167,11 +163,7 @@ function App() {
 										initial={{ scale: 0.9, opacity: 0 }}
 										animate={{ scale: 1, opacity: 1 }}
 										transition={{ duration: 0.3 }}
-										className="bg-gray-800 border border-gray-700 
-                      rounded-2xl overflow-hidden 
-                      transform transition duration-300 
-                      hover:scale-105 hover:shadow-2xl 
-                      hover:border-purple-500"
+										className="bg-gray-800 border border-gray-700 rounded-2xl overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-2xl hover:border-purple-500"
 									>
 										<div className="p-6 flex flex-col h-full">
 											<h3 className="text-xl font-bold text-white mb-3">
@@ -183,19 +175,11 @@ function App() {
 											<div className="flex justify-between items-center mt-auto">
 												<a
 													href="#"
-													className="text-purple-400 hover:text-purple-300 
-                            transition duration-300 font-semibold"
+													className="text-purple-400 hover:text-purple-300 transition duration-300 font-semibold"
 												>
 													Explore More
 												</a>
-												<div
-													className="px-3 py-1 
-                          bg-opacity-20 rounded-full text-sm 
-                          capitalize
-                          bg-gradient-to-r 
-                          from-gray-600 to-gray-800 
-                          text-gray-300"
-												>
+												<div className="px-3 py-1 bg-opacity-20 rounded-full text-sm capitalize bg-gradient-to-r from-gray-600 to-gray-800 text-gray-300">
 													{blog.category}
 												</div>
 											</div>
@@ -212,23 +196,19 @@ function App() {
 							<button
 								onClick={() => handlePageChange(pagination.currentPage - 1)}
 								disabled={pagination.currentPage === 1}
-								className="px-4 py-2 bg-gray-800 text-gray-300 
-                  rounded-full disabled:opacity-50 
-                  hover:bg-purple-600 transition duration-300"
+								className="px-4 py-2 bg-gray-800 text-gray-300 rounded-full disabled:opacity-50 hover:bg-purple-600 transition duration-300"
 							>
 								<FaChevronLeft />
 							</button>
-
 							{[...Array(pagination.totalPages)].map((_, index) => (
 								<button
 									key={index}
 									onClick={() => handlePageChange(index + 1)}
-									className={`w-10 h-10 rounded-full 
-                    ${
-											pagination.currentPage === index + 1
-												? "bg-gradient-to-r from-purple-500 to-red-500 text-white"
-												: "bg-gray-800 text-gray-400 hover:bg-gray-700"
-										}`}
+									className={`w-10 h-10 rounded-full ${
+										pagination.currentPage === index + 1
+											? "bg-gradient-to-r from-purple-500 to-red-500 text-white"
+											: "bg-gray-800 text-gray-400 hover:bg-gray-700"
+									}`}
 								>
 									{index + 1}
 								</button>
@@ -237,9 +217,7 @@ function App() {
 							<button
 								onClick={() => handlePageChange(pagination.currentPage + 1)}
 								disabled={pagination.currentPage === pagination.totalPages}
-								className="px-4 py-2 bg-gray-800 text-gray-300 
-                  rounded-full disabled:opacity-50 
-                  hover:bg-purple-600 transition duration-300"
+								className="px-4 py-2 bg-gray-800 text-gray-300 rounded-full disabled:opacity-50 hover:bg-purple-600 transition duration-300"
 							>
 								<FaChevronRight />
 							</button>
