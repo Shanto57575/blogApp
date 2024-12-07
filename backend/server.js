@@ -1,7 +1,7 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const cors = require("cors");
 const Blog = require("./models/blog.model");
+const dbConnection = require("./db/connectDB");
 require('dotenv').config()
 
 const app = express();
@@ -12,25 +12,11 @@ app.use(cors({
         'https://blog-uni-verse.vercel.app',
         'http://localhost:5173'
     ],
-    methods: ['GET', 'POST'],
+    methods: ['GET'],
     allowedHeaders: ['Content-Type']
 }));
 
 app.use(express.json());
-
-const startServer = async () => {
-    try {
-        console.log("MongoDB URL:", process.env.MONGODB_URL);
-        await mongoose.connect(process.env.MONGODB_URL);
-        console.log("MONGODB CONNECTED SUCCESSFULLY");
-    } catch (error) {
-        console.error("Error connecting to MongoDB:", {
-            message: error.message,
-            stack: error.stack
-        });
-        process.exit(1);
-    }
-};
 
 app.get('/', (req, res) => {
     res.send({ message: "Blog Api is Running Fine" })
@@ -83,6 +69,6 @@ app.get("/api/search", async (req, res) => {
 });
 
 app.listen(PORT, async () => {
-    await startServer();
+    await dbConnection();
     console.log(`Server is running on port ${PORT}`);
 });
