@@ -16,7 +16,6 @@ app.use(cors({
     allowedHeaders: ['Content-Type']
 }));
 
-
 app.use(express.json());
 
 app.get('/', (req, res) => {
