@@ -33,7 +33,6 @@ function App() {
 		},
 		{ value: "food", label: "Food", gradient: "from-red-400 to-red-600" },
 	];
-	console.log(import.meta.env.VITE_BACKEND_URL);
 
 	const fetchResults = async (page = 1) => {
 		setLoading(true);

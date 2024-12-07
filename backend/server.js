@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 5001;
 
 app.use(cors({
     origin: [
-        'https://blog-uni-verse.vercel.app',
+        'https://shanto-blog-app.vercel.app',
         'http://localhost:5173'
     ],
     methods: ['GET'],
