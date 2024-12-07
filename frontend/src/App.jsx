@@ -39,7 +39,7 @@ function App() {
 		setLoading(true);
 		try {
 			const response = await axios.get(
-				"https://shanto-blogbackend.vercel.app/api/search",
+				"https://blogapp-qqer.onrender.com/api/search",
 				{
 					params: {
 						query,
