@@ -2,16 +2,35 @@ const express = require("express");
 const cors = require("cors");
 const Blog = require("./models/blog.model");
 const dbConnection = require("./db/connectDB");
-require('dotenv').config()
+const mongoose = require('mongoose');
+require('dotenv').config();
+
+mongoose.connection.on('error', (err) => {
+    console.error('Mongoose connection error:', err);
+});
+
+mongoose.connection.on('connected', () => {
+    console.log('Mongoose connected to database');
+});
 
 const app = express();
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 5000;
+
+app.use((req, res, next) => {
+    console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+    next();
+});
+
+// CORS configuration
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+    ? process.env.ALLOWED_ORIGINS.split(',')
+    : [
+        'https://your-frontend-url.vercel.app',
+        'http://localhost:5173'
+    ];
 
 app.use(cors({
-    origin: [
-        'https://shanto-blog-app.vercel.app',
-        'http://localhost:5173'
-    ],
+    origin: allowedOrigins,
     methods: ['GET'],
     allowedHeaders: ['Content-Type']
 }));
@@ -19,8 +38,8 @@ app.use(cors({
 app.use(express.json());
 
 app.get('/', (req, res) => {
-    res.send({ message: "Blog Api is Running Fine" })
-})
+    res.send({ message: "Blog API is Running Fine" });
+});
 
 app.get("/api/search", async (req, res) => {
     const {
@@ -47,6 +66,11 @@ app.get("/api/search", async (req, res) => {
     }
 
     try {
+        // Add connection check
+        if (mongoose.connection.readyState !== 1) {
+            await dbConnection();
+        }
+
         const totalBlogs = await Blog.countDocuments(searchQuery);
 
         const blogs = await Blog.find(searchQuery)
@@ -68,7 +92,24 @@ app.get("/api/search", async (req, res) => {
     }
 });
 
-app.listen(PORT, async () => {
-    await dbConnection();
-    console.log(`Server is running on port ${PORT}`);
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error("Unhandled Error:", err.stack);
+    res.status(500).send('Something broke!');
 });
+
+const startServer = async () => {
+    try {
+        // Establish DB connection first
+        await dbConnection();
+
+        app.listen(PORT, () => {
+            console.log(`Server is running on port ${PORT}`);
+        });
+    } catch (error) {
+        console.error("Failed to start the server:", error);
+        process.exit(1);
+    }
+};
+
+startServer();
