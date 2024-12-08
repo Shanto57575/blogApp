@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+require('dotenv').config()
 
 const dbConnection = async () => {
     try {
@@ -6,8 +7,6 @@ const dbConnection = async () => {
         if (!mongoURI) {
             throw new Error("MongoDB URI is not set in environment variables");
         }
-
-        console.log("MongoDB URI:", mongoURI);
 
         await mongoose.connect(mongoURI);
 

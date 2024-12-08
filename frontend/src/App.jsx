@@ -64,14 +64,17 @@ function App() {
 		async (page = 1) => {
 			setLoading(true);
 			try {
-				const response = await axios.get(`http://localhost:5000/api/search`, {
-					params: {
-						query,
-						category,
-						page,
-						limit: 6,
-					},
-				});
+				const response = await axios.get(
+					`https://blogapp-qqer.onrender.com/api/search`,
+					{
+						params: {
+							query,
+							category,
+							page,
+							limit: 6,
+						},
+					}
+				);
 
 				setBlogs(response.data.blogs);
 				setPagination({
@@ -211,7 +214,7 @@ function App() {
 					</div>
 
 					{/* Category Filters */}
-					<div className="flex flex-wrap justify-center gap-3 mb-6">
+					<div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-6">
 						{categories.map((cat, index) => {
 							const CategoryIcon = cat.icon;
 							return (
@@ -219,24 +222,27 @@ function App() {
 									key={cat.value}
 									onClick={() => setCategory(cat.value)}
 									className={`
-                    px-4 py-2 rounded-full 
-                    flex items-center space-x-2 
-                    transition duration-300 
-                    ${
-											category === cat.value
-												? `bg-gradient-to-r ${cat.gradient} text-white`
-												: `
-                        ${
-													darkMode
-														? "bg-[#2c3347] text-gray-300 hover:bg-[#3a4255]"
-														: "bg-gray-200 text-gray-700 hover:bg-gray-300"
-												}
-                      `
-										}
-                  `}
+          px-3 sm:px-4 py-2 rounded-full 
+          flex items-center space-x-2 
+          transition duration-300 
+          text-sm sm:text-base
+          ${
+						category === cat.value
+							? `bg-gradient-to-r ${cat.gradient} text-white`
+							: `
+                ${
+									darkMode
+										? "bg-[#2c3347] text-gray-300 hover:bg-[#3a4255]"
+										: "bg-gray-200 text-gray-700 hover:bg-gray-300"
+								}
+              `
+					}
+        `}
 								>
-									<CategoryIcon className="w-5 h-5" />
-									<span>{cat.label}</span>
+									<CategoryIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+									<span className="hidden sm:inline">{cat.label}</span>
+									{/* Short labels for mobile */}
+									<span className="sm:hidden">{cat.label.split(" ")[0]}</span>
 								</button>
 							);
 						})}
@@ -252,8 +258,7 @@ function App() {
 					) : blogs?.length === 0 ? (
 						<div
 							className={`
-                text-center p-12 rounded-xl 
-                ${
+                text-center p-12 rounded-xl ${
 									darkMode
 										? "bg-[#1e2235] text-gray-300"
 										: "bg-white text-gray-700"
